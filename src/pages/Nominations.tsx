@@ -43,13 +43,13 @@ const Nominations = () => {
   };
 
   return (
-    <div className="container mx-auto p-6 max-w-7xl">
-      <div className="flex justify-between items-center mb-6">
+    <div className="container mx-auto p-8 max-w-7xl">
+      <div className="flex justify-between items-start mb-8">
         <div>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+          <h1 className="text-3xl font-bold text-foreground mb-2">
             Nominations
           </h1>
-          <p className="text-muted-foreground mt-1">
+          <p className="text-muted-foreground">
             Recognize and celebrate outstanding contributions
           </p>
         </div>
@@ -59,24 +59,26 @@ const Nominations = () => {
         </Button>
       </div>
 
-      <div className="grid gap-4">
+      <div className="grid gap-6">
         {nominations.map((nomination) => (
-          <Card key={nomination.id} className="hover:shadow-md transition-shadow">
-            <CardHeader>
+          <Card key={nomination.id} className="hover:shadow-lg transition-all duration-200 border-border/50">
+            <CardHeader className="pb-4">
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-4">
-                  <Avatar className="h-12 w-12">
+                  <Avatar className="h-14 w-14 border-2 border-primary/10">
                     <AvatarImage 
                       src={`https://api.dicebear.com/9.x/notionists/svg?seed=${nomination.nominee}`} 
                       alt={nomination.nominee}
                     />
-                    <AvatarFallback>{nomination.nominee.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                    <AvatarFallback className="bg-primary/10 text-primary font-semibold">
+                      {nomination.nominee.split(' ').map(n => n[0]).join('')}
+                    </AvatarFallback>
                   </Avatar>
                   <div>
-                    <CardTitle className="text-lg">{nomination.nominee}</CardTitle>
-                    <CardDescription className="flex items-center gap-2 mt-1">
+                    <CardTitle className="text-lg mb-1">{nomination.nominee}</CardTitle>
+                    <CardDescription className="flex items-center gap-2 text-xs">
                       <span>Nominated by {nomination.nominator}</span>
-                      <span>•</span>
+                      <span className="text-border">•</span>
                       <span className="flex items-center gap-1">
                         <Calendar className="h-3 w-3" />
                         {new Date(nomination.date).toLocaleDateString()}
@@ -84,17 +86,17 @@ const Nominations = () => {
                     </CardDescription>
                   </div>
                 </div>
-                <Badge className={getStatusColor(nomination.status)}>
-                  {nomination.status}
+                <Badge variant="secondary" className={getStatusColor(nomination.status)}>
+                  {nomination.status.charAt(0).toUpperCase() + nomination.status.slice(1)}
                 </Badge>
               </div>
             </CardHeader>
-            <CardContent>
-              <div className="flex items-start gap-3">
-                <Trophy className="h-5 w-5 text-primary mt-0.5" />
+            <CardContent className="pt-0">
+              <div className="flex items-start gap-3 p-4 rounded-lg bg-muted/50">
+                <Trophy className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
                 <div className="flex-1">
-                  <p className="font-medium text-sm mb-1">{nomination.category}</p>
-                  <p className="text-sm text-muted-foreground">{nomination.description}</p>
+                  <p className="font-semibold text-sm mb-1.5 text-foreground">{nomination.category}</p>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{nomination.description}</p>
                 </div>
               </div>
             </CardContent>

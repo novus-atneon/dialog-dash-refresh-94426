@@ -36,13 +36,13 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible="icon" className="border-r shadow-lg">
       {/* Header with Logo */}
-      <div className="h-16 flex items-center justify-center border-b bg-gradient-to-br from-primary/10 via-primary/5 to-transparent backdrop-blur-sm px-4">
-        <div className="flex items-center gap-2">
-          <div className="p-2 rounded-lg bg-gradient-to-br from-primary to-primary/70 shadow-md">
+      <div className="h-16 flex items-center justify-center border-b px-4">
+        <div className="flex items-center gap-3">
+          <div className="p-2 rounded-lg bg-primary">
             <ClipboardList className="h-5 w-5 text-primary-foreground" />
           </div>
           {open && (
-            <h3 className="font-semibold text-sm bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">360° Feedback</h3>
+            <h3 className="font-semibold text-sm text-sidebar-foreground">360° Feedback</h3>
           )}
         </div>
       </div>
