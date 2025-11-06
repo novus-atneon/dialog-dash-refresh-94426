@@ -1,4 +1,4 @@
-import { ClipboardList, Settings, LogOut } from "lucide-react";
+import { ClipboardList, Settings, LogOut, Trophy } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
 
 import {
@@ -18,7 +18,8 @@ import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 
 const items = [
-  { title: "Feedback Matrix", url: "/", icon: ClipboardList },
+  { title: "Nominations", url: "/", icon: Trophy },
+  { title: "Feedback Matrix", url: "/feedback", icon: ClipboardList },
   { title: "Admin Panel", url: "/admin", icon: Settings },
 ];
 
@@ -53,7 +54,7 @@ export function AppSidebar() {
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
+                  <SidebarMenuButton asChild variant="outline" tooltip={item.title}>
                     <NavLink
                       to={item.url}
                       end

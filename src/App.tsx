@@ -7,9 +7,12 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { Bell } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
+import Nominations from "./pages/Nominations";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -37,6 +40,16 @@ const App = () => {
                     </h2>
                   </div>
                   <Button
+                    variant="ghost"
+                    size="icon"
+                    className="relative"
+                  >
+                    <Bell className="h-5 w-5" />
+                    <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs">
+                      3
+                    </Badge>
+                  </Button>
+                  <Button
                     variant={is360View ? "default" : "secondary"}
                     size="sm"
                     onClick={() => setIs360View(!is360View)}
@@ -47,7 +60,8 @@ const App = () => {
                 </header>
                 <main className="flex-1 overflow-x-hidden">
                   <Routes>
-                    <Route path="/" element={<Index is360View={is360View} />} />
+                    <Route path="/" element={<Nominations />} />
+                    <Route path="/feedback" element={<Index is360View={is360View} />} />
                     <Route path="/auth" element={<Auth />} />
                     <Route path="/admin" element={<Admin />} />
                     {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
