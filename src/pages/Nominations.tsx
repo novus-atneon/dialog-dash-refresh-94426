@@ -6,8 +6,9 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { UserPlus, Send, TrendingUp, CheckCircle2, Clock, Sparkles } from "lucide-react";
+import { UserPlus, Send, CheckCircle2, Clock, Sparkles } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import NominationsWelcome from "@/components/NominationsWelcome";
 
 const Nominations = () => {
   const { toast } = useToast();
@@ -28,13 +29,7 @@ const Nominations = () => {
     setOpen(false);
   };
 
-  // Mock data
-  const stats = [
-    { label: "Total Invitations", value: "24", icon: Send, color: "text-blue-500" },
-    { label: "Pending Responses", value: "8", icon: Clock, color: "text-yellow-500" },
-    { label: "Completed", value: "16", icon: CheckCircle2, color: "text-green-500" },
-    { label: "Response Rate", value: "67%", icon: TrendingUp, color: "text-purple-500" },
-  ];
+  // Stats removed per design update
 
   const recentInvites = [
     { id: 1, name: "Sarah Johnson", email: "sarah@example.com", status: "pending", date: "2024-01-15", avatar: "SJ" },
@@ -126,24 +121,8 @@ const Nominations = () => {
           </div>
         </div>
 
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-          {stats.map((stat) => (
-            <Card key={stat.label} className="hover:shadow-md transition-shadow">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-muted-foreground mb-1">{stat.label}</p>
-                    <p className="text-3xl font-bold">{stat.value}</p>
-                  </div>
-                  <div className={`p-3 rounded-full bg-accent/50 ${stat.color}`}>
-                    <stat.icon className="h-6 w-6" />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+        {/* Welcome Section */}
+        <NominationsWelcome />
 
         {/* Recent Invitations */}
         <Card className="border-primary/10">
