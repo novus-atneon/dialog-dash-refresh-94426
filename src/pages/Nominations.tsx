@@ -5,11 +5,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { UserPlus, Send, Users, MessageSquare, Clock } from "lucide-react";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { UserPlus, Send, TrendingUp, CheckCircle2, Clock, Sparkles } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 const Nominations = () => {
   const { toast } = useToast();
+  const [open, setOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
@@ -23,190 +25,194 @@ const Nominations = () => {
     setEmail("");
     setName("");
     setMessage("");
+    setOpen(false);
   };
 
-  // Mock recent invitations
+  // Mock data
+  const stats = [
+    { label: "Total Invitations", value: "24", icon: Send, color: "text-blue-500" },
+    { label: "Pending Responses", value: "8", icon: Clock, color: "text-yellow-500" },
+    { label: "Completed", value: "16", icon: CheckCircle2, color: "text-green-500" },
+    { label: "Response Rate", value: "67%", icon: TrendingUp, color: "text-purple-500" },
+  ];
+
   const recentInvites = [
-    { id: 1, name: "Sarah Johnson", email: "sarah@example.com", status: "pending", date: "2024-01-15" },
-    { id: 2, name: "Michael Chen", email: "michael@example.com", status: "completed", date: "2024-01-14" },
-    { id: 3, name: "Emily Davis", email: "emily@example.com", status: "pending", date: "2024-01-13" },
+    { id: 1, name: "Sarah Johnson", email: "sarah@example.com", status: "pending", date: "2024-01-15", avatar: "SJ" },
+    { id: 2, name: "Michael Chen", email: "michael@example.com", status: "completed", date: "2024-01-14", avatar: "MC" },
+    { id: 3, name: "Emily Davis", email: "emily@example.com", status: "pending", date: "2024-01-13", avatar: "ED" },
+    { id: 4, name: "Alex Thompson", email: "alex@example.com", status: "completed", date: "2024-01-12", avatar: "AT" },
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
-      <div className="container mx-auto p-6 max-w-7xl">
-        <div className="grid lg:grid-cols-[1fr,400px] gap-6">
-          {/* Left: Welcome Section */}
-          <div className="space-y-6">
-            <div className="space-y-2">
-              <h1 className="text-4xl font-bold tracking-tight">
-                Request Feedback
-              </h1>
-              <p className="text-muted-foreground text-lg">
-                Invite colleagues and peers to provide feedback that will appear in your feedback matrix
-              </p>
-            </div>
-
-            <Card className="border-primary/20 bg-card/50 backdrop-blur">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Users className="h-5 w-5 text-primary" />
-                  How It Works
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex gap-4">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10">
-                    <span className="text-sm font-bold text-primary">1</span>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-1">Send an Invitation</h4>
-                    <p className="text-sm text-muted-foreground">
-                      Invite people to provide feedback on your competencies using the form on the right
-                    </p>
-                  </div>
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-accent/5">
+      <div className="container mx-auto px-6 py-8 max-w-7xl">
+        {/* Hero Section */}
+        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border border-primary/20 p-8 md:p-12 mb-8">
+          <div className="absolute inset-0 bg-grid-white/5 [mask-image:radial-gradient(white,transparent_85%)]" />
+          <div className="relative">
+            <div className="flex items-start justify-between flex-wrap gap-4">
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <Sparkles className="h-6 w-6 text-primary" />
+                  <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
+                    Request Feedback
+                  </h1>
                 </div>
-
-                <div className="flex gap-4">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10">
-                    <span className="text-sm font-bold text-primary">2</span>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-1">They Provide Feedback</h4>
-                    <p className="text-sm text-muted-foreground">
-                      Recipients will receive a link to rate your competencies across different areas
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex gap-4">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10">
-                    <span className="text-sm font-bold text-primary">3</span>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-1">View in Matrix</h4>
-                    <p className="text-sm text-muted-foreground">
-                      All feedback appears in your feedback matrix for comprehensive analysis
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Recent Invitations */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Clock className="h-5 w-5" />
-                  Recent Invitations
-                </CardTitle>
-                <CardDescription>
-                  Track the status of your feedback requests
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  {recentInvites.map((invite) => (
-                    <div key={invite.id} className="flex items-center gap-4 p-3 rounded-lg bg-muted/50">
-                      <Avatar className="h-10 w-10">
-                        <AvatarImage 
-                          src={`https://api.dicebear.com/9.x/notionists/svg?seed=${invite.email}`}
-                          alt={invite.name}
-                        />
-                        <AvatarFallback>{invite.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-                      </Avatar>
-                      <div className="flex-1 min-w-0">
-                        <p className="font-medium text-sm">{invite.name}</p>
-                        <p className="text-xs text-muted-foreground truncate">{invite.email}</p>
-                      </div>
-                      <div className="text-right">
-                        <span className={`text-xs px-2 py-1 rounded-full ${
-                          invite.status === "completed" 
-                            ? "bg-green-500/10 text-green-700 dark:text-green-400"
-                            : "bg-yellow-500/10 text-yellow-700 dark:text-yellow-400"
-                        }`}>
-                          {invite.status}
-                        </span>
-                        <p className="text-xs text-muted-foreground mt-1">
-                          {new Date(invite.date).toLocaleDateString()}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Right: Invite Panel */}
-          <div className="lg:sticky lg:top-6 h-fit">
-            <Card className="border-primary/20">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <UserPlus className="h-5 w-5" />
-                  Invite for Feedback
-                </CardTitle>
-                <CardDescription>
-                  Send a feedback request to a colleague or peer
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <form onSubmit={handleInvite} className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="name">Name</Label>
-                    <Input
-                      id="name"
-                      placeholder="John Doe"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="email">Email Address *</Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      placeholder="john@example.com"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      required
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="message">Personal Message (Optional)</Label>
-                    <Textarea
-                      id="message"
-                      placeholder="I'd appreciate your feedback on my recent work..."
-                      value={message}
-                      onChange={(e) => setMessage(e.target.value)}
-                      rows={4}
-                    />
-                  </div>
-
-                  <Button type="submit" className="w-full gap-2">
-                    <Send className="h-4 w-4" />
+                <p className="text-lg text-muted-foreground max-w-2xl">
+                  Grow through insights. Invite colleagues and peers to share feedback that powers your development journey.
+                </p>
+              </div>
+              
+              <Dialog open={open} onOpenChange={setOpen}>
+                <DialogTrigger asChild>
+                  <Button size="lg" className="gap-2 shadow-lg hover:shadow-xl transition-shadow">
+                    <UserPlus className="h-5 w-5" />
                     Send Invitation
                   </Button>
-                </form>
-
-                <div className="mt-6 p-4 rounded-lg bg-muted/50">
-                  <div className="flex gap-2">
-                    <MessageSquare className="h-5 w-5 text-primary shrink-0 mt-0.5" />
-                    <div>
-                      <p className="text-sm font-medium mb-1">What will they receive?</p>
-                      <p className="text-xs text-muted-foreground">
-                        Recipients will get an email with a personalized link to provide feedback on your competencies. 
-                        The process is quick and straightforward.
-                      </p>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[500px]">
+                  <DialogHeader>
+                    <DialogTitle className="flex items-center gap-2">
+                      <UserPlus className="h-5 w-5 text-primary" />
+                      Invite for Feedback
+                    </DialogTitle>
+                    <DialogDescription>
+                      Send a feedback request to a colleague or peer. They'll receive a personalized link to provide their insights.
+                    </DialogDescription>
+                  </DialogHeader>
+                  
+                  <form onSubmit={handleInvite} className="space-y-4 mt-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="name">Name</Label>
+                      <Input
+                        id="name"
+                        placeholder="John Doe"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                      />
                     </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="email">Email Address *</Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        placeholder="john@example.com"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="message">Personal Message (Optional)</Label>
+                      <Textarea
+                        id="message"
+                        placeholder="I'd appreciate your feedback on my recent work and collaboration..."
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
+                        rows={4}
+                      />
+                    </div>
+
+                    <Button type="submit" className="w-full gap-2">
+                      <Send className="h-4 w-4" />
+                      Send Invitation
+                    </Button>
+                  </form>
+                </DialogContent>
+              </Dialog>
+            </div>
+          </div>
+        </div>
+
+        {/* Stats Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          {stats.map((stat) => (
+            <Card key={stat.label} className="hover:shadow-md transition-shadow">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-muted-foreground mb-1">{stat.label}</p>
+                    <p className="text-3xl font-bold">{stat.value}</p>
+                  </div>
+                  <div className={`p-3 rounded-full bg-accent/50 ${stat.color}`}>
+                    <stat.icon className="h-6 w-6" />
                   </div>
                 </div>
               </CardContent>
             </Card>
-          </div>
+          ))}
         </div>
+
+        {/* Recent Invitations */}
+        <Card className="border-primary/10">
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle className="text-2xl">Recent Invitations</CardTitle>
+                <CardDescription className="mt-2">
+                  Track the status of your feedback requests
+                </CardDescription>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="grid gap-4">
+              {recentInvites.map((invite) => (
+                <div
+                  key={invite.id}
+                  className="flex items-center gap-4 p-4 rounded-xl bg-accent/30 hover:bg-accent/50 transition-colors border border-border/50"
+                >
+                  <Avatar className="h-14 w-14 ring-2 ring-background">
+                    <AvatarImage 
+                      src={`https://api.dicebear.com/9.x/notionists/svg?seed=${invite.email}`}
+                      alt={invite.name}
+                    />
+                    <AvatarFallback className="bg-primary/10 text-primary font-semibold">
+                      {invite.avatar}
+                    </AvatarFallback>
+                  </Avatar>
+                  
+                  <div className="flex-1 min-w-0">
+                    <p className="font-semibold text-base">{invite.name}</p>
+                    <p className="text-sm text-muted-foreground truncate">{invite.email}</p>
+                  </div>
+                  
+                  <div className="flex items-center gap-4">
+                    <div className="text-right hidden sm:block">
+                      <p className="text-sm text-muted-foreground">
+                        {new Date(invite.date).toLocaleDateString('en-US', { 
+                          month: 'short', 
+                          day: 'numeric',
+                          year: 'numeric'
+                        })}
+                      </p>
+                    </div>
+                    
+                    <div className={`px-4 py-1.5 rounded-full text-sm font-medium ${
+                      invite.status === "completed" 
+                        ? "bg-green-500/10 text-green-700 dark:text-green-400 border border-green-500/20"
+                        : "bg-yellow-500/10 text-yellow-700 dark:text-yellow-400 border border-yellow-500/20"
+                    }`}>
+                      {invite.status === "completed" ? (
+                        <span className="flex items-center gap-1">
+                          <CheckCircle2 className="h-3.5 w-3.5" />
+                          Completed
+                        </span>
+                      ) : (
+                        <span className="flex items-center gap-1">
+                          <Clock className="h-3.5 w-3.5" />
+                          Pending
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
