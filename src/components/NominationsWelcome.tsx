@@ -3,43 +3,43 @@ import { Users, MessageSquare, Sparkles } from "lucide-react";
 
 const NominationsWelcome = () => {
   return (
-    <section aria-label="Welcome" className="mb-8">
-      <Card className="border-primary/10 bg-gradient-to-br from-background via-background to-accent/5">
-        <CardHeader>
-          <CardTitle className="text-2xl">Welcome</CardTitle>
-          <CardDescription>
+    <section aria-label="Welcome" className="mb-6 sm:mb-8">
+      <Card className="border-primary/10 bg-[var(--gradient-card)] shadow-[var(--shadow-sm)] overflow-hidden">
+        <CardHeader className="space-y-3 pb-4">
+          <CardTitle className="text-2xl sm:text-3xl font-bold">Welcome</CardTitle>
+          <CardDescription className="text-base">
             Invite colleagues to share feedback. Their responses will appear on your Feedback Matrix to help guide your growth.
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div className="flex items-start gap-3">
-              <div className="p-2 rounded-md bg-primary/10 text-primary">
+        <CardContent className="pt-2">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 sm:gap-6">
+            <div className="flex items-start gap-3.5 p-4 rounded-xl bg-background/50 border border-primary/5 hover:border-primary/10 transition-[var(--transition-fast)]">
+              <div className="p-2.5 rounded-xl bg-primary/10 text-primary flex-shrink-0">
                 <Users className="h-5 w-5" />
               </div>
-              <div>
-                <p className="font-medium">Choose reviewers</p>
-                <p className="text-sm text-muted-foreground">Invite peers, managers, or reports who know your work.</p>
+              <div className="space-y-1">
+                <p className="font-semibold text-base">Choose reviewers</p>
+                <p className="text-sm text-muted-foreground leading-relaxed">Invite peers, managers, or reports who know your work.</p>
               </div>
             </div>
 
-            <div className="flex items-start gap-3">
-              <div className="p-2 rounded-md bg-primary/10 text-primary">
+            <div className="flex items-start gap-3.5 p-4 rounded-xl bg-background/50 border border-primary/5 hover:border-primary/10 transition-[var(--transition-fast)]">
+              <div className="p-2.5 rounded-xl bg-primary/10 text-primary flex-shrink-0">
                 <MessageSquare className="h-5 w-5" />
               </div>
-              <div>
-                <p className="font-medium">They share feedback</p>
-                <p className="text-sm text-muted-foreground">A secure link lets them respond quickly from any device.</p>
+              <div className="space-y-1">
+                <p className="font-semibold text-base">They share feedback</p>
+                <p className="text-sm text-muted-foreground leading-relaxed">A secure link lets them respond quickly from any device.</p>
               </div>
             </div>
 
-            <div className="flex items-start gap-3">
-              <div className="p-2 rounded-md bg-primary/10 text-primary">
+            <div className="flex items-start gap-3.5 p-4 rounded-xl bg-background/50 border border-primary/5 hover:border-primary/10 transition-[var(--transition-fast)]">
+              <div className="p-2.5 rounded-xl bg-primary/10 text-primary flex-shrink-0">
                 <Sparkles className="h-5 w-5" />
               </div>
-              <div>
-                <p className="font-medium">See insights</p>
-                <p className="text-sm text-muted-foreground">Results update your Feedback Matrix in real time.</p>
+              <div className="space-y-1">
+                <p className="font-semibold text-base">See insights</p>
+                <p className="text-sm text-muted-foreground leading-relaxed">Results update your Feedback Matrix in real time.</p>
               </div>
             </div>
           </div>
