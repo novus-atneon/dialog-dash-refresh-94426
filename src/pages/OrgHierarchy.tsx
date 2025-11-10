@@ -2,25 +2,17 @@ import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ChevronDown, ChevronRight, Search, AlertTriangle } from "lucide-react";
+import { ChevronDown, ChevronRight, Search } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Slider } from "@/components/ui/slider";
+
 
 interface Employee {
   id: string;
   name: string;
   empId: string;
-  avatar: string;
   grade: string;
-  level: string;
-  doj: string;
-  incrementMin: number;
-  incrementMax: number;
-  currentIncrement: number;
-  finalPromotion: boolean;
-  currentBase: string;
-  hasAlert?: boolean;
+  position: string;
+  nominations: number;
   reportees?: Employee[];
 }
 
@@ -29,58 +21,111 @@ const mockData: Employee[] = [
     id: "1",
     name: "Regina Ramos",
     empId: "E00016",
-    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Regina",
     grade: "M4",
-    level: "Vice President",
-    doj: "Mar 11, 2013",
-    incrementMin: 0,
-    incrementMax: 20,
-    currentIncrement: 15,
-    finalPromotion: true,
-    currentBase: "INR 1,120,469",
+    position: "Vice President",
+    nominations: 12,
     reportees: [
       {
         id: "2",
         name: "Dayanar Margait",
         empId: "E00019",
-        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Dayanar",
-        grade: "M4",
-        level: "Vice President",
-        doj: "Mar 11, 2013",
-        incrementMin: 0,
-        incrementMax: 20,
-        currentIncrement: 12,
-        finalPromotion: true,
-        currentBase: "INR 1,120,469",
-        hasAlert: true,
+        grade: "M3",
+        position: "Senior Director",
+        nominations: 8,
+        reportees: [
+          {
+            id: "2-1",
+            name: "Priya Sharma",
+            empId: "E00045",
+            grade: "M2",
+            position: "Director",
+            nominations: 5,
+            reportees: [
+              {
+                id: "2-1-1",
+                name: "Amit Kumar",
+                empId: "E00078",
+                grade: "M1",
+                position: "Manager",
+                nominations: 3,
+                reportees: [
+                  {
+                    id: "2-1-1-1",
+                    name: "Sarah Johnson",
+                    empId: "E00112",
+                    grade: "E4",
+                    position: "Senior Engineer",
+                    nominations: 2,
+                  },
+                  {
+                    id: "2-1-1-2",
+                    name: "Michael Chen",
+                    empId: "E00115",
+                    grade: "E3",
+                    position: "Engineer",
+                    nominations: 1,
+                  },
+                  {
+                    id: "2-1-1-3",
+                    name: "Emily Davis",
+                    empId: "E00118",
+                    grade: "E3",
+                    position: "Engineer",
+                    nominations: 1,
+                  },
+                ],
+              },
+              {
+                id: "2-1-2",
+                name: "Raj Patel",
+                empId: "E00081",
+                grade: "M1",
+                position: "Manager",
+                nominations: 2,
+              },
+              {
+                id: "2-1-3",
+                name: "Lisa Anderson",
+                empId: "E00084",
+                grade: "M1",
+                position: "Manager",
+                nominations: 4,
+              },
+            ],
+          },
+          {
+            id: "2-2",
+            name: "Vikram Singh",
+            empId: "E00048",
+            grade: "M2",
+            position: "Director",
+            nominations: 6,
+          },
+          {
+            id: "2-3",
+            name: "Anita Desai",
+            empId: "E00051",
+            grade: "M2",
+            position: "Director",
+            nominations: 4,
+          },
+        ],
       },
       {
         id: "3",
         name: "Ugma Singh",
         empId: "E00030",
-        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Ugma",
-        grade: "M4",
-        level: "Vice President",
-        doj: "Jun 2, 2014",
-        incrementMin: 0,
-        incrementMax: 20,
-        currentIncrement: 10,
-        finalPromotion: false,
-        currentBase: "INR 6,255,696",
+        grade: "M3",
+        position: "Senior Director",
+        nominations: 10,
       },
       {
         id: "4",
         name: "Tripti Mangat",
         empId: "E00021",
-        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Tripti",
-        grade: "M4",
-        level: "Vice President",
-        doj: "Jan 2, 2017",
-        incrementMin: 0,
-        incrementMax: 20,
-        currentIncrement: 14,
-        finalPromotion: false,
-        currentBase: "INR 9,504,727",
+        grade: "M3",
+        position: "Senior Director",
+        nominations: 7,
       },
     ],
   },
@@ -88,45 +133,25 @@ const mockData: Employee[] = [
     id: "5",
     name: "Kelsey Reyes",
     empId: "E00059",
-    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Kelsey",
-    grade: "M3",
-    level: "Senior Executive",
-    doj: "Jun 21, 2021",
-    incrementMin: 0,
-    incrementMax: 20,
-    currentIncrement: 8,
-    finalPromotion: true,
-    currentBase: "INR 5,513,641",
+    grade: "M4",
+    position: "Vice President",
+    nominations: 15,
     reportees: [
       {
         id: "6",
         name: "Ekta Som",
         empId: "E00015",
-        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Ekta",
-        grade: "M12",
-        level: "Senior Executive",
-        doj: "Jun 21, 2021",
-        incrementMin: 0,
-        incrementMax: 20,
-        currentIncrement: 16,
-        finalPromotion: true,
-        currentBase: "INR 5,513,641",
-        hasAlert: true,
+        grade: "M3",
+        position: "Senior Director",
+        nominations: 9,
       },
       {
         id: "7",
         name: "Kashvi Bath",
         empId: "E00016",
-        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Kashvi",
-        grade: "M1",
-        level: "Senior Vice President",
-        doj: "Dec 6, 2021",
-        incrementMin: 0,
-        incrementMax: 20,
-        currentIncrement: 11,
-        finalPromotion: false,
-        currentBase: "INR 2,350,461",
-        hasAlert: true,
+        grade: "M3",
+        position: "Senior Director",
+        nominations: 11,
       },
     ],
   },
@@ -156,16 +181,12 @@ const HierarchyRow = ({ employee, depth = 0 }: { employee: Employee; depth?: num
               </Button>
             )}
             {!hasReportees && <div className="w-6" />}
-            <Avatar className="h-8 w-8">
-              <AvatarImage src={employee.avatar} />
-              <AvatarFallback>{employee.name.substring(0, 2)}</AvatarFallback>
-            </Avatar>
             <div>
               <div className="font-medium text-sm flex items-center gap-2">
                 {employee.name}
                 {hasReportees && (
                   <Badge variant="secondary" className="text-xs">
-                    {employee.reportees?.length} Employees
+                    {employee.reportees?.length}
                   </Badge>
                 )}
               </div>
@@ -173,32 +194,9 @@ const HierarchyRow = ({ employee, depth = 0 }: { employee: Employee; depth?: num
             </div>
           </div>
         </td>
-        <td className="p-3">
-          <div className="flex items-center gap-2">
-            {employee.hasAlert && <AlertTriangle className="h-4 w-4 text-yellow-500" />}
-            <span className="text-sm font-medium">{employee.grade}</span>
-          </div>
-        </td>
-        <td className="p-3 text-sm">{employee.level}</td>
-        <td className="p-3 text-sm text-muted-foreground">{employee.doj}</td>
-        <td className="p-3">
-          <div className="flex items-center gap-3 min-w-[200px]">
-            <span className="text-xs text-muted-foreground">Min 0%</span>
-            <Slider
-              value={[employee.currentIncrement]}
-              max={employee.incrementMax}
-              step={1}
-              className="flex-1"
-            />
-            <span className="text-xs text-muted-foreground">Max {employee.incrementMax}%</span>
-          </div>
-        </td>
-        <td className="p-3">
-          <Badge variant={employee.finalPromotion ? "default" : "secondary"}>
-            {employee.finalPromotion ? "Yes" : "No"}
-          </Badge>
-        </td>
-        <td className="p-3 text-sm font-medium">{employee.currentBase}</td>
+        <td className="p-3 text-sm">{employee.grade}</td>
+        <td className="p-3 text-sm">{employee.position}</td>
+        <td className="p-3 text-sm text-center">{employee.nominations}</td>
       </tr>
       {hasReportees && isExpanded && employee.reportees?.map((reportee) => (
         <HierarchyRow key={reportee.id} employee={reportee} depth={depth + 1} />
@@ -216,21 +214,10 @@ const OrgHierarchy = () => {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold">Comp Planner Hierarchy</h1>
+            <h1 className="text-3xl font-bold">Organization Hierarchy</h1>
             <p className="text-sm text-muted-foreground mt-1">
-              Displaying 20 rows and 30 columns
+              Visualize your organizational structure and reporting relationships
             </p>
-          </div>
-          <div className="flex gap-3">
-            <Badge variant="outline" className="bg-blue-500/10 text-blue-600 border-blue-500/20">
-              Existing Grade
-            </Badge>
-            <Badge variant="outline" className="bg-orange-500/10 text-orange-600 border-orange-500/20">
-              Increment
-            </Badge>
-            <Badge variant="outline" className="bg-teal-500/10 text-teal-600 border-teal-500/20">
-              Annual Rewards Decision
-            </Badge>
           </div>
         </div>
 
@@ -256,44 +243,25 @@ const OrgHierarchy = () => {
                   <th className="p-3 text-left text-sm font-semibold sticky left-0 bg-muted/50 z-20">
                     Employee
                   </th>
-                  <th className="p-3 text-left text-sm font-semibold min-w-[120px]">
+                  <th className="p-3 text-left text-sm font-semibold min-w-[100px]">
                     <div className="flex items-center gap-2">
-                      Existing Grade
+                      Grade
                       <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
                         <ChevronDown className="h-3 w-3" />
                       </Button>
                     </div>
                   </th>
-                  <th className="p-3 text-left text-sm font-semibold min-w-[160px]">
+                  <th className="p-3 text-left text-sm font-semibold min-w-[180px]">
                     <div className="flex items-center gap-2">
-                      Existing Level
+                      Position
                       <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
                         <ChevronDown className="h-3 w-3" />
                       </Button>
                     </div>
                   </th>
-                  <th className="p-3 text-left text-sm font-semibold min-w-[120px]">
-                    <div className="flex items-center gap-2">
-                      DOJ
-                      <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
-                        <ChevronDown className="h-3 w-3" />
-                      </Button>
-                    </div>
-                  </th>
-                  <th className="p-3 text-left text-sm font-semibold min-w-[280px]">
-                    Guideline
-                  </th>
-                  <th className="p-3 text-left text-sm font-semibold min-w-[140px]">
-                    <div className="flex items-center gap-2">
-                      Final Promotion
-                      <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
-                        <ChevronDown className="h-3 w-3" />
-                      </Button>
-                    </div>
-                  </th>
-                  <th className="p-3 text-left text-sm font-semibold min-w-[140px]">
-                    <div className="flex items-center gap-2">
-                      Current Base
+                  <th className="p-3 text-center text-sm font-semibold min-w-[140px]">
+                    <div className="flex items-center justify-center gap-2">
+                      No. of Nominations
                       <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
                         <ChevronDown className="h-3 w-3" />
                       </Button>
