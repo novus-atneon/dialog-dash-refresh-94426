@@ -1,7 +1,10 @@
 import { Card } from "@/components/ui/card";
 import { Users, Network, AlertTriangle, Upload, RefreshCw, BookOpen, CheckCircle, AlertCircle } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const Admin = () => {
+  const navigate = useNavigate();
+  
   return (
     <div className="min-h-screen bg-background p-8">
       <div className="max-w-7xl mx-auto space-y-8">
@@ -83,7 +86,10 @@ const Admin = () => {
             </div>
           </Card>
 
-          <Card className="p-6 hover:shadow-lg transition-all cursor-pointer group">
+          <Card 
+            className="p-6 hover:shadow-lg transition-all cursor-pointer group"
+            onClick={() => navigate('/org-hierarchy')}
+          >
             <div className="flex items-start justify-between">
               <div className="space-y-2">
                 <h3 className="text-xl font-semibold group-hover:text-primary transition-colors">
