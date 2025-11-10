@@ -160,43 +160,73 @@ const mockData: Employee[] = [
 const HierarchyRow = ({ employee, depth = 0 }: { employee: Employee; depth?: number }) => {
   const [isExpanded, setIsExpanded] = useState(true);
   const hasReportees = employee.reportees && employee.reportees.length > 0;
+  const depthIndicatorColor = `hsl(${263 - depth * 20} ${85 - depth * 10}% ${55 + depth * 5}%)`;
 
   return (
     <>
-      <tr className="border-b hover:bg-muted/30 transition-colors">
-        <td className="p-3 sticky left-0 bg-background z-10" style={{ paddingLeft: `${depth * 24 + 12}px` }}>
+      <tr className="group border-b border-border/50 hover:bg-accent/30 transition-all duration-200 animate-fade-in">
+        <td 
+          className="py-4 px-3 sticky left-0 bg-background group-hover:bg-accent/30 z-10 transition-all duration-200" 
+          style={{ paddingLeft: `${depth * 28 + 16}px` }}
+        >
           <div className="flex items-center gap-3">
-            {hasReportees && (
+            {depth > 0 && (
+              <div 
+                className="w-0.5 h-full absolute left-0 top-0"
+                style={{ 
+                  background: depthIndicatorColor,
+                  opacity: 0.2,
+                  left: `${depth * 28}px`
+                }}
+              />
+            )}
+            {hasReportees ? (
               <Button
                 variant="ghost"
                 size="sm"
-                className="h-6 w-6 p-0"
+                className="h-7 w-7 p-0 rounded-md hover:bg-primary/10 transition-all duration-200"
                 onClick={() => setIsExpanded(!isExpanded)}
               >
                 {isExpanded ? (
-                  <ChevronDown className="h-4 w-4" />
+                  <ChevronDown className="h-4 w-4 text-primary transition-transform" />
                 ) : (
-                  <ChevronRight className="h-4 w-4" />
+                  <ChevronRight className="h-4 w-4 text-primary transition-transform" />
                 )}
               </Button>
+            ) : (
+              <div className="w-7" />
             )}
-            {!hasReportees && <div className="w-6" />}
-            <div>
-              <div className="font-medium text-sm flex items-center gap-2">
-                {employee.name}
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2.5">
+                <span className="font-semibold text-sm text-foreground truncate">
+                  {employee.name}
+                </span>
                 {hasReportees && (
-                  <Badge variant="secondary" className="text-xs">
+                  <Badge 
+                    variant="secondary" 
+                    className="text-xs font-medium px-2 py-0.5 bg-primary/10 text-primary border-primary/20 hover:bg-primary/20 transition-colors"
+                  >
                     {employee.reportees?.length}
                   </Badge>
                 )}
               </div>
-              <div className="text-xs text-muted-foreground">{employee.empId}</div>
+              <div className="text-xs text-muted-foreground mt-0.5">{employee.empId}</div>
             </div>
           </div>
         </td>
-        <td className="p-3 text-sm">{employee.grade}</td>
-        <td className="p-3 text-sm">{employee.position}</td>
-        <td className="p-3 text-sm text-center">{employee.nominations}</td>
+        <td className="py-4 px-3">
+          <Badge variant="outline" className="font-medium text-xs">
+            {employee.grade}
+          </Badge>
+        </td>
+        <td className="py-4 px-3">
+          <span className="text-sm text-foreground/90">{employee.position}</span>
+        </td>
+        <td className="py-4 px-3 text-center">
+          <span className="inline-flex items-center justify-center min-w-[32px] h-7 px-2.5 rounded-full bg-muted text-sm font-medium">
+            {employee.nominations}
+          </span>
+        </td>
       </tr>
       {hasReportees && isExpanded && employee.reportees?.map((reportee) => (
         <HierarchyRow key={reportee.id} employee={reportee} depth={depth + 1} />
@@ -209,67 +239,81 @@ const OrgHierarchy = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   return (
-    <div className="min-h-screen bg-background p-8">
-      <div className="max-w-[1600px] mx-auto space-y-6">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-accent/5 p-8">
+      <div className="max-w-[1600px] mx-auto space-y-8">
         {/* Header */}
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold">Organization Hierarchy</h1>
-            <p className="text-sm text-muted-foreground mt-1">
+        <div className="flex items-center justify-between animate-fade-in">
+          <div className="space-y-1.5">
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
+              Organization Hierarchy
+            </h1>
+            <p className="text-sm text-muted-foreground">
               Visualize your organizational structure and reporting relationships
             </p>
           </div>
         </div>
 
         {/* Search */}
-        <Card className="p-4">
+        <Card className="p-5 shadow-md border-border/50 animate-fade-in">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
             <Input
-              placeholder="Search employee"
+              placeholder="Search by name, employee ID, or position..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9"
+              className="pl-12 h-11 border-border/50 focus:border-primary/50 transition-all"
             />
           </div>
         </Card>
 
         {/* Table */}
-        <Card className="overflow-hidden">
+        <Card className="overflow-hidden shadow-lg border-border/50 animate-fade-in">
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-muted/50 border-b">
+              <thead className="bg-muted/70 border-b border-border/50">
                 <tr>
-                  <th className="p-3 text-left text-sm font-semibold sticky left-0 bg-muted/50 z-20">
+                  <th className="py-4 px-3 text-left text-sm font-semibold text-foreground sticky left-0 bg-muted/70 z-20 min-w-[280px]">
                     Employee
                   </th>
-                  <th className="p-3 text-left text-sm font-semibold min-w-[100px]">
+                  <th className="py-4 px-3 text-left text-sm font-semibold text-foreground min-w-[100px]">
                     <div className="flex items-center gap-2">
                       Grade
-                      <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
-                        <ChevronDown className="h-3 w-3" />
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        className="h-6 w-6 p-0 hover:bg-primary/10 transition-colors"
+                      >
+                        <ChevronDown className="h-3.5 w-3.5" />
                       </Button>
                     </div>
                   </th>
-                  <th className="p-3 text-left text-sm font-semibold min-w-[180px]">
+                  <th className="py-4 px-3 text-left text-sm font-semibold text-foreground min-w-[200px]">
                     <div className="flex items-center gap-2">
                       Position
-                      <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
-                        <ChevronDown className="h-3 w-3" />
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        className="h-6 w-6 p-0 hover:bg-primary/10 transition-colors"
+                      >
+                        <ChevronDown className="h-3.5 w-3.5" />
                       </Button>
                     </div>
                   </th>
-                  <th className="p-3 text-center text-sm font-semibold min-w-[140px]">
+                  <th className="py-4 px-3 text-center text-sm font-semibold text-foreground min-w-[160px]">
                     <div className="flex items-center justify-center gap-2">
-                      No. of Nominations
-                      <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
-                        <ChevronDown className="h-3 w-3" />
+                      Nominations
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        className="h-6 w-6 p-0 hover:bg-primary/10 transition-colors"
+                      >
+                        <ChevronDown className="h-3.5 w-3.5" />
                       </Button>
                     </div>
                   </th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="divide-y divide-border/30">
                 {mockData.map((employee) => (
                   <HierarchyRow key={employee.id} employee={employee} />
                 ))}
