@@ -14,6 +14,7 @@ import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
 import Nominations from "./pages/Nominations";
 import OrgHierarchy from "./pages/OrgHierarchy";
+import Compilations from "./pages/Compilations";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -66,6 +67,7 @@ const App = () => {
                     <Route path="/auth" element={<Auth />} />
                     <Route path="/admin" element={<Admin />} />
                     <Route path="/org-hierarchy" element={<OrgHierarchy />} />
+                    <Route path="/compilations" element={<Compilations />} />
                     {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                     <Route path="*" element={<NotFound />} />
                   </Routes>

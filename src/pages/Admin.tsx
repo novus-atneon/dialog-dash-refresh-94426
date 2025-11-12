@@ -1,5 +1,5 @@
 import { Card } from "@/components/ui/card";
-import { Users, Network, AlertTriangle, Upload, RefreshCw, BookOpen, CheckCircle, AlertCircle } from "lucide-react";
+import { Users, Network, AlertTriangle, Upload, RefreshCw, BookOpen, CheckCircle, AlertCircle, MessageSquare } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const Admin = () => {
@@ -101,6 +101,25 @@ const Admin = () => {
               </div>
               <div className="w-12 h-12 rounded-lg bg-muted/50 flex items-center justify-center group-hover:bg-primary/10 transition-colors">
                 <Network className="h-6 w-6 text-muted-foreground group-hover:text-primary transition-colors" />
+              </div>
+            </div>
+          </Card>
+
+          <Card 
+            className="p-6 hover:shadow-lg transition-all cursor-pointer group"
+            onClick={() => navigate('/compilations')}
+          >
+            <div className="flex items-start justify-between">
+              <div className="space-y-2">
+                <h3 className="text-xl font-semibold group-hover:text-primary transition-colors">
+                  Feedback Compilations
+                </h3>
+                <p className="text-sm text-muted-foreground">
+                  Review feedback and ratings for all downlines
+                </p>
+              </div>
+              <div className="w-12 h-12 rounded-lg bg-muted/50 flex items-center justify-center group-hover:bg-primary/10 transition-colors">
+                <MessageSquare className="h-6 w-6 text-muted-foreground group-hover:text-primary transition-colors" />
               </div>
             </div>
           </Card>
