@@ -1,4 +1,4 @@
-import { ClipboardList, Settings, LogOut, Trophy } from "lucide-react";
+import { ClipboardList, Settings, LogOut, Trophy, FileBarChart, Network } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
 
 import {
@@ -20,6 +20,8 @@ import { Button } from "@/components/ui/button";
 const items = [
   { title: "Nominations", url: "/", icon: Trophy },
   { title: "Feedback Matrix", url: "/feedback", icon: ClipboardList },
+  { title: "Compilations", url: "/compilations", icon: FileBarChart },
+  { title: "Org Hierarchy", url: "/org-hierarchy", icon: Network },
   { title: "Admin Panel", url: "/admin", icon: Settings },
 ];
 

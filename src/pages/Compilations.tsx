@@ -1,9 +1,16 @@
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, ChevronRight, Search } from "lucide-react";
+import { ChevronDown, ChevronRight, Users, Star, BarChart3, TrendingUp, Download, Filter } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface FeedbackEmployee {
   id: string;
@@ -143,16 +150,15 @@ const mockData: FeedbackEmployee[] = [
 const FeedbackRow = ({ employee, depth = 0 }: { employee: FeedbackEmployee; depth?: number }) => {
   const [isExpanded, setIsExpanded] = useState(true);
   const hasReportees = employee.reportees && employee.reportees.length > 0;
-  const depthIndicatorColor = `hsl(${263 - depth * 20} ${85 - depth * 10}% ${55 + depth * 5}%)`;
 
   const getStatusColor = (status: string) => {
     switch (status) {
       case "completed":
-        return "bg-green-500/10 text-green-600 border-green-500/20";
+        return "bg-success/10 text-success border-success/20";
       case "in-progress":
-        return "bg-yellow-500/10 text-yellow-600 border-yellow-500/20";
+        return "bg-warning/10 text-warning border-warning/20";
       case "pending":
-        return "bg-red-500/10 text-red-600 border-red-500/20";
+        return "bg-destructive/10 text-destructive border-destructive/20";
       default:
         return "bg-muted text-muted-foreground";
     }
@@ -175,25 +181,34 @@ const FeedbackRow = ({ employee, depth = 0 }: { employee: FeedbackEmployee; dept
     <>
       <tr className="group border-b border-border/50 hover:bg-accent/30 transition-all duration-200 animate-fade-in">
         <td 
-          className="py-4 px-3 sticky left-0 bg-background group-hover:bg-accent/30 z-10 transition-all duration-200" 
-          style={{ paddingLeft: `${depth * 28 + 16}px` }}
+          className="py-4 px-4 sticky left-0 bg-background group-hover:bg-accent/30 z-10 transition-all duration-200" 
+          style={{ paddingLeft: `${depth * 32 + 16}px` }}
         >
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 relative">
             {depth > 0 && (
-              <div 
-                className="w-0.5 h-full absolute left-0 top-0"
-                style={{ 
-                  background: depthIndicatorColor,
-                  opacity: 0.2,
-                  left: `${depth * 28}px`
-                }}
-              />
+              <>
+                {/* Vertical line */}
+                <div 
+                  className="absolute w-px bg-border h-full top-0"
+                  style={{ 
+                    left: `${-16}px`
+                  }}
+                />
+                {/* Horizontal connecting line */}
+                <div 
+                  className="absolute w-4 h-px bg-border"
+                  style={{ 
+                    left: `${-16}px`,
+                    top: '50%'
+                  }}
+                />
+              </>
             )}
             {hasReportees ? (
               <Button
                 variant="ghost"
                 size="sm"
-                className="h-7 w-7 p-0 rounded-md hover:bg-primary/10 transition-all duration-200"
+                className="h-7 w-7 p-0 rounded-md hover:bg-primary/10 transition-all duration-200 relative z-10"
                 onClick={() => setIsExpanded(!isExpanded)}
               >
                 {isExpanded ? (
@@ -223,20 +238,12 @@ const FeedbackRow = ({ employee, depth = 0 }: { employee: FeedbackEmployee; dept
             </div>
           </div>
         </td>
-        <td className="py-4 px-3">
-          <Badge variant="outline" className="font-medium text-xs">
-            {employee.grade}
-          </Badge>
-        </td>
-        <td className="py-4 px-3">
-          <span className="text-sm text-foreground/90">{employee.position}</span>
-        </td>
-        <td className="py-4 px-3 text-center">
+        <td className="py-4 px-4 text-center">
           <span className="inline-flex items-center justify-center min-w-[32px] h-7 px-2.5 rounded-full bg-muted text-sm font-medium">
             {employee.feedbackCount}
           </span>
         </td>
-        <td className="py-4 px-3 text-center">
+        <td className="py-4 px-4 text-center">
           <div className="flex items-center justify-center gap-1.5">
             <span className="text-sm font-semibold text-foreground">
               {employee.avgRating.toFixed(1)}
@@ -244,7 +251,7 @@ const FeedbackRow = ({ employee, depth = 0 }: { employee: FeedbackEmployee; dept
             <span className="text-xs text-muted-foreground">/5.0</span>
           </div>
         </td>
-        <td className="py-4 px-3 text-center">
+        <td className="py-4 px-4 text-center">
           <Badge 
             variant="outline" 
             className={`font-medium text-xs ${getStatusColor(employee.status)}`}
@@ -261,70 +268,170 @@ const FeedbackRow = ({ employee, depth = 0 }: { employee: FeedbackEmployee; dept
 };
 
 const Compilations = () => {
-  const [searchQuery, setSearchQuery] = useState("");
+  const [activeTab, setActiveTab] = useState("overview");
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-accent/5 p-8">
-      <div className="max-w-[1600px] mx-auto space-y-8">
+      <div className="max-w-[1600px] mx-auto space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between animate-fade-in">
-          <div className="space-y-1.5">
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
-              Feedback Compilations
+          <div className="space-y-1">
+            <h1 className="text-4xl font-bold" style={{ background: 'var(--gradient-header)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+              Feedback Compilation
             </h1>
             <p className="text-sm text-muted-foreground">
-              View and manage feedback for your downlines
+              Manager & HRBP Dashboard - Team Performance Insights
             </p>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <Select defaultValue="q4-2024">
+              <SelectTrigger className="w-40 bg-background">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="q4-2024">Q4 2024</SelectItem>
+                <SelectItem value="q3-2024">Q3 2024</SelectItem>
+                <SelectItem value="q2-2024">Q2 2024</SelectItem>
+                <SelectItem value="q1-2024">Q1 2024</SelectItem>
+              </SelectContent>
+            </Select>
+
+            <Button variant="outline" className="gap-2">
+              <Filter className="h-4 w-4" />
+              Filter
+            </Button>
+
+            <Button className="gap-2 bg-primary hover:bg-primary/90">
+              <Download className="h-4 w-4" />
+              Export Report
+            </Button>
           </div>
         </div>
 
-        {/* Search */}
-        <Card className="p-5 shadow-md border-border/50 animate-fade-in">
-          <div className="relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-            <Input
-              placeholder="Search by name, employee ID, or position..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-12 h-11 border-border/50 focus:border-primary/50 transition-all"
-            />
-          </div>
-        </Card>
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 animate-fade-in">
+          <Card className="p-6 border-border/50 hover:shadow-lg transition-all duration-300">
+            <div className="flex items-start justify-between">
+              <div className="space-y-2">
+                <p className="text-sm text-muted-foreground font-medium">Team Members</p>
+                <p className="text-4xl font-bold">4</p>
+                <p className="text-xs text-muted-foreground">Active reviewees</p>
+              </div>
+              <div className="p-3 rounded-xl bg-primary/10">
+                <Users className="h-6 w-6 text-primary" />
+              </div>
+            </div>
+          </Card>
 
-        {/* Table */}
-        <Card className="overflow-hidden shadow-lg border-border/50 animate-fade-in">
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-muted/70 border-b border-border/50">
-                <tr>
-                  <th className="py-4 px-3 text-left text-sm font-semibold text-foreground sticky left-0 bg-muted/70 z-20 min-w-[280px]">
-                    Employee
-                  </th>
-                  <th className="py-4 px-3 text-left text-sm font-semibold text-foreground min-w-[100px]">
-                    Grade
-                  </th>
-                  <th className="py-4 px-3 text-left text-sm font-semibold text-foreground min-w-[200px]">
-                    Position
-                  </th>
-                  <th className="py-4 px-3 text-center text-sm font-semibold text-foreground min-w-[140px]">
-                    Feedback Count
-                  </th>
-                  <th className="py-4 px-3 text-center text-sm font-semibold text-foreground min-w-[120px]">
-                    Avg Rating
-                  </th>
-                  <th className="py-4 px-3 text-center text-sm font-semibold text-foreground min-w-[140px]">
-                    Status
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border/30">
-                {mockData.map((employee) => (
-                  <FeedbackRow key={employee.id} employee={employee} />
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </Card>
+          <Card className="p-6 border-border/50 hover:shadow-lg transition-all duration-300">
+            <div className="flex items-start justify-between">
+              <div className="space-y-2">
+                <p className="text-sm text-muted-foreground font-medium">Avg Rating</p>
+                <p className="text-4xl font-bold">4.2</p>
+                <p className="text-xs text-success flex items-center gap-1">
+                  <TrendingUp className="h-3 w-3" />
+                  +0.3 from last period
+                </p>
+              </div>
+              <div className="p-3 rounded-xl bg-primary/10">
+                <Star className="h-6 w-6 text-primary" />
+              </div>
+            </div>
+          </Card>
+
+          <Card className="p-6 border-border/50 hover:shadow-lg transition-all duration-300">
+            <div className="flex items-start justify-between">
+              <div className="space-y-2">
+                <p className="text-sm text-muted-foreground font-medium">Total Feedback</p>
+                <p className="text-4xl font-bold">91</p>
+                <p className="text-xs text-muted-foreground">Responses received</p>
+              </div>
+              <div className="p-3 rounded-xl bg-primary/10">
+                <BarChart3 className="h-6 w-6 text-primary" />
+              </div>
+            </div>
+          </Card>
+
+          <Card className="p-6 border-border/50 hover:shadow-lg transition-all duration-300">
+            <div className="flex items-start justify-between">
+              <div className="space-y-2">
+                <p className="text-sm text-muted-foreground font-medium">Completion</p>
+                <p className="text-4xl font-bold">91%</p>
+                <p className="text-xs text-muted-foreground">Average completion</p>
+              </div>
+              <div className="p-3 rounded-xl bg-primary/10">
+                <TrendingUp className="h-6 w-6 text-primary" />
+              </div>
+            </div>
+          </Card>
+        </div>
+
+        {/* Tabs */}
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="animate-fade-in">
+          <TabsList className="bg-muted/50">
+            <TabsTrigger value="overview">Team Overview</TabsTrigger>
+            <TabsTrigger value="competencies">Competencies</TabsTrigger>
+            <TabsTrigger value="reports">Individual Reports</TabsTrigger>
+            <TabsTrigger value="analytics">Trends & Analytics</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="overview" className="space-y-6 mt-6">
+            {/* Team Performance Summary */}
+            <Card className="overflow-hidden shadow-lg border-border/50">
+              <div className="p-6 border-b border-border/50 bg-muted/30">
+                <h3 className="text-lg font-semibold">Team Performance Summary</h3>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Overview of all team members and their feedback metrics
+                </p>
+              </div>
+
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-muted/50 border-b border-border/50">
+                    <tr>
+                      <th className="py-4 px-4 text-left text-sm font-semibold text-foreground sticky left-0 bg-muted/50 z-20 min-w-[280px]">
+                        Employee
+                      </th>
+                      <th className="py-4 px-4 text-center text-sm font-semibold text-foreground min-w-[140px]">
+                        Feedback Count
+                      </th>
+                      <th className="py-4 px-4 text-center text-sm font-semibold text-foreground min-w-[120px]">
+                        Avg Rating
+                      </th>
+                      <th className="py-4 px-4 text-center text-sm font-semibold text-foreground min-w-[140px]">
+                        Status
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-border/30">
+                    {mockData.map((employee) => (
+                      <FeedbackRow key={employee.id} employee={employee} />
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="competencies">
+            <Card className="p-8 text-center text-muted-foreground">
+              Competencies view coming soon...
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="reports">
+            <Card className="p-8 text-center text-muted-foreground">
+              Individual reports coming soon...
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="analytics">
+            <Card className="p-8 text-center text-muted-foreground">
+              Trends & Analytics coming soon...
+            </Card>
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );
