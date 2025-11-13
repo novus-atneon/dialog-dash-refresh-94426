@@ -1,4 +1,4 @@
-import { ClipboardList, Settings, LogOut, Trophy, FileBarChart, Network } from "lucide-react";
+import { ClipboardList, Settings, LogOut, Trophy, FileBarChart } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
 
 import {
@@ -21,7 +21,6 @@ const items = [
   { title: "Nominations", url: "/", icon: Trophy },
   { title: "Feedback Matrix", url: "/feedback", icon: ClipboardList },
   { title: "Compilations", url: "/compilations", icon: FileBarChart },
-  { title: "Org Hierarchy", url: "/org-hierarchy", icon: Network },
   { title: "Admin Panel", url: "/admin", icon: Settings },
 ];
 
@@ -56,18 +55,20 @@ export function AppSidebar() {
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild variant="outline" tooltip={item.title}>
+                  <SidebarMenuButton asChild tooltip={item.title}>
                     <NavLink
                       to={item.url}
                       end
                       className={({ isActive }) =>
-                        isActive
-                          ? "bg-accent text-accent-foreground font-medium"
-                          : ""
+                        `flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 ${
+                          isActive
+                            ? "bg-primary/10 text-primary font-medium shadow-sm"
+                            : "hover:bg-accent/50"
+                        }`
                       }
                     >
-                      <item.icon className="h-4 w-4" />
-                      {open && <span>{item.title}</span>}
+                      <item.icon className="h-5 w-5" />
+                      {open && <span className="font-medium">{item.title}</span>}
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { MessageSquare } from "lucide-react";
+import { MessageSquare, Target, MessageCircle, Crown, Puzzle, Handshake, Zap, Lightbulb, RefreshCw } from "lucide-react";
 import { EmployeeColumn } from "./EmployeeColumn";
 import { CompetencyRow } from "./CompetencyRow";
 import { FeedbackDialog } from "./FeedbackDialog";
@@ -92,49 +92,49 @@ const competencies = [
     id: "1",
     name: "Strategic Thinking",
     description: "Ability to think ahead and plan",
-    icon: "🎯",
+    icon: Target,
   },
   {
     id: "2",
     name: "Communication",
     description: "Effectiveness in conveying ideas and information",
-    icon: "💬",
+    icon: MessageCircle,
   },
   {
     id: "3",
     name: "Leadership",
     description: "Capacity to guide and inspire others",
-    icon: "👑",
+    icon: Crown,
   },
   {
     id: "4",
     name: "Problem Solving",
     description: "Skill in identifying and resolving issues",
-    icon: "🧩",
+    icon: Puzzle,
   },
   {
     id: "5",
     name: "Collaboration",
     description: "Ability to work effectively with teams",
-    icon: "🤝",
+    icon: Handshake,
   },
   {
     id: "6",
     name: "Technical Excellence",
     description: "Depth of technical knowledge and expertise",
-    icon: "⚡",
+    icon: Zap,
   },
   {
     id: "7",
     name: "Innovation",
     description: "Creativity and ability to drive new ideas",
-    icon: "💡",
+    icon: Lightbulb,
   },
   {
     id: "8",
     name: "Adaptability",
     description: "Flexibility in responding to change",
-    icon: "🔄",
+    icon: RefreshCw,
   },
 ];
 
